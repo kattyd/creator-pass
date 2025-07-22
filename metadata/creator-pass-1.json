@@ -1,0 +1,15 @@
+{
+    "name": "creator pass #1",
+    "description": "an exclusive NFT creator pass on the platform.",
+    "image": "ipfs://bafkreidivwb6a5bsn7lh3w3cadjwcbyy3oirpgoj7ugjwvihdapst7edqy",
+    "attributes": [
+        {
+            "trait_type": "access",
+            "value": "premium"
+        },
+        {
+            "trait_type": "tier",
+            "value": "gold"
+        }
+    ]
+}

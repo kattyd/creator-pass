@@ -1,60 +1,53 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ethers } from "ethers";
-import { contractABI, contractAddress } from "../constants/CreatorPass";
+import contractABI from "./contracts/CreatorPass.json";
+import "./App.css"; // or wherever your styles are
+
+const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+const tokenId = 0; // You can make this dynamic later
 
 const CreatorPassMint = () => {
-    const [walletAddress, setWalletAddress] = useState("");
-    const [loading, setLoading] = useState(false);
+  const [metadata, setMetadata] = useState(null);
+  const [error, setError] = useState("");
 
-    const connectWallet = async () => {
-        if (window.ethereum) {
-            try {
-                const accounts = await window.ethereum.request({
-                    method: "eth_requestAccounts",
-                });
-                setWalletAddress(accounts[0]);
-            } catch (err) {
-                console.error("user rejected connection:", err);
-            } 
-        } else {
-            alert("please install Metamask");
-        }
-    };
-    
-    const mintPass = () => {
-        if (!walletAddress) return alert("connect your wallet first");
+  useEffect(() => {
+    const fetchMetadata = async () => {
+      try {
+        if (!window.ethereum) throw new Error("MetaMask not found");
 
-        try {
-            setLoading(true);
-            const provider = new ethers.BrowserProvider(window.ethereum);
-            const signer = await provider.getSigner();
-            const creatorPass = new ethers.Contract(contractAddress, contractABI, signer);
-            const tx = await creatorPass.safeMint(walletAddress);
-            await tx.wait();
-            alert("🎉 Creator Pass NFT minted!");
-        } catch (err) {
-            console.error("minting failed:", err);
-            alert("⚠️ minting failed - check the console for details");
-        } finally {
-            setLoading(false);
-        }
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        const signer = await provider.getSigner();
+        const contract = new ethers.Contract(contractAddress, contractABI.abi, signer);
+
+        // Call tokenURI for the given tokenId
+        const tokenURI = await contract.tokenURI(tokenId);
+
+        // Convert IPFS URI to HTTP gateway URL
+        const httpURL = tokenURI.replace("ipfs://", "https://gateway.pinata.cloud/ipfs/");
+
+        const res = await fetch(httpURL);
+        const metadata = await res.json();
+
+        setMetadata(metadata);
+      } catch (err) {
+        console.error(err);
+        setError(err.message || "Failed to fetch metadata");
+      }
     };
 
-    return (
-        <div style={{ textAlign: "center", marginTop: "100px", color: "#fff" }}>
-            <h1>creator pass mint</h1>
-            {walletAddress ? (
-                <p>connected wallet: {walletAddress}</p>
-            ) : (
-                <button onClick={connectWallet}>connect wallet</button>
-            )}
+    fetchMetadata();
+  }, []);
 
-            <br /><br />
-            <button onClick={mintPass} disabled={loading}>
-                {loading ? "minting..." : "mint my creator pass"}
-            </button>
-        </div>
-    );
+  if (error) return <div>❌ Error: {error}</div>;
+  if (!metadata) return <div>⏳ Loading...</div>;
+
+  return (
+    <div className="nft-display">
+      <h2>{metadata.name}</h2>
+      <img src={metadata.image.replace("ipfs://", "https://gateway.pinata.cloud/ipfs/")} alt={metadata.name} style={{ width: 300 }} />
+      <p>{metadata.description}</p>
+    </div>
+  );
 };
 
 export default CreatorPassMint;

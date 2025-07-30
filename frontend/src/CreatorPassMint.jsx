@@ -4,7 +4,7 @@ import contractABI from "./contracts/CreatorPass.json";
 import "./App.css"; // or wherever your styles are
 
 const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
-const tokenId = 0; // You can make this dynamic later
+const tokenURI = await contract.tokenURI(tokenId);
 
 const CreatorPassMint = () => {
   const [metadata, setMetadata] = useState(null);

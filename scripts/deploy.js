@@ -10,7 +10,7 @@ async function main() {
   const contractAddress = await creatorPass.getAddress();
   console.log(`✅ contract deployed to: ${contractAddress}`);
 
-  const metadataURI = "ipfs://YOUR_METADATA_CID";
+  const metadataURI = "ipfs://bafkreidivwb6a5bsn7lh3w3cadjwcbyy3oirpgoj7ugjwvihdapst7edqy";
   const tx = await creatorPass.safeMint(deployer.address, metadataURI);
   await tx.wait();
 

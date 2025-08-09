@@ -18,7 +18,7 @@ function Navbar()  {
                 </ul>
                 </div>
                 <div className="nav-btns">
-                    <button className="btn1">Exlpore</button>
+                    <button className="btn1">Explore</button>
                     <button className="btn2">Sign Up</button>
                 </div>
             </nav>

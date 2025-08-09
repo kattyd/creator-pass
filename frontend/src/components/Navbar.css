@@ -2,22 +2,34 @@
     height: 40px;
     border: 2px solid #000;
     align-items: center;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 10px;
     color: #000;
     display: flex;
     justify-content: space-between;
-    width: 100%;
-    padding: 0 1rem;
+    padding: 10px 0 0 10px;
+    background-color: transparent;
 
 }
 .logo img {
     height: 40px;
 }
 .nav-links ul {
-    color: #000;
+    color: #ab5e92;
+    font-weight: bold;
     display: flex;
     list-style: none;
     gap: 1rem;
+    margin-left: 60px;
 }
 .nav-btns {
+    display: flex;
+    align-items: center;
+}
+.nav-btns button{
     margin-right: 1rem;
+    margin-bottom: 10px;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
 }
